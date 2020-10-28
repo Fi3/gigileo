@@ -1,0 +1,4 @@
+/target
+/fe-app/node_modules
+/fi3-wasm-pdf-generator/target
+/fi3-wasm-pdf-generator/pkg

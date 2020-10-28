@@ -1,0 +1,167 @@
+<html>
+    <head>
+        <script type="module" src="/build/index.js"></script>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <input
+            id="upload"
+            type="file"
+            accept="image/*"
+            display="none"
+            >
+        </input>
+
+        <div id="login-background">
+            <div id="login">
+                <div id=login-inner>
+                    <p>PASSWORD</p>
+                    <input
+                        type=password 
+                        id=password
+                        placeholder="Default password: PASSWORD">
+                    </input>
+                </div>
+                <div>
+                    <button id=password-button>Ok</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="header">
+            GigiLeo
+        </div>
+
+        <div id="app">
+            <div id="sidebar">
+                <div class="selector" id="dragdrop">
+                    <div class="icon" id="dragdrop-icon"></div>
+                </div>
+                <div class="selector" id="select">
+                    <div class="icon" id="select-icon"></div>
+                </div>
+                <div class="selector" id="font">
+                    <div class="icon" id="font-icon"></div>
+                </div>
+                <div class="selector" id="iterator">
+                    <div class="icon" id="iterator-icon"></div>
+                </div>
+                <div class="selector" id="load">
+                    <div class="icon" id="load-icon"></div>
+                </div>
+                <div class="selector" id="try">
+                    <div class="icon" id="try-icon"></div>
+                </div>
+                <div class="selector" id="save">
+                    <div class="icon" id="save-icon"></div>
+                </div>
+            </div>
+            <div id="workspace">
+                <div id="real-workspace">
+                    <p id=message>To start load an image or use the test one</p>
+                    <button id=load-image>LOAD IMAGE</button>
+                    <button id=use-test-image>USE TEST IMAGE</button>
+                    <!--<img id="image" src="test-image.jpg"></img>-->
+                    <img id="loading" src="loading2.gif"></img>
+                    <img id="image" ></img>
+                  <div id="label">
+                      <div id="name" contenteditable="false">Name</div>
+                      <div id="spacing"></div>
+                      <div id="surname" contenteditable="false">Surname</div>
+                  </div>
+                </div>
+            </div>
+            <div id="setfont">
+                <div id="setfont-control">
+                    <div id="setfont-close"></div>
+                </div>
+                <div id="setfont-internal">
+                    <div>
+                        <label for="select-font-family">Font family:</label>
+                        <select name="font-family" id="select-font-family">
+                            <option value="">--Please choose a font--</option>
+                            <option value="dancing-script">Dancing Script</option>
+                            <option value="playfair">Playfair</option>
+                            <option value="playfair-italic">Playfair Italic</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="select-font-size">Font size:</label>
+                        <input
+                            name="font-size"
+                            id="select-font-size"
+                            type="range"
+                            min="24"
+                            max="80"
+                            step="1"
+                            value="32"
+                            >
+                        </input>
+                    </div>
+                    <div>
+                        <label for="select-font-weight">Font weight:</label>
+                        <input
+                            name="font-weight"
+                            id="select-font-weight"
+                            type="range"
+                            min="100"
+                            max="900"
+                            step="100"
+                            value="400"
+                            >
+                        </input>
+                    </div>
+                    <div>
+                        <label for="select-label-interspace">Spacing:</label>
+                        <input
+                            name="label-interspace"
+                            id="select-label-interspace"
+                            type="range"
+                            min="0.5"
+                            max="5.5"
+                            step="0.1"
+                            value="2"
+                            >
+                        </input>
+                    </div>
+                    <div>
+                        <label for="select-name-max">Max name:</label>
+                        <input
+                            name="name-max"
+                            id="select-name-max"
+                            type="range"
+                            min="4"
+                            max="13"
+                            step="1"
+                            value="4"
+                            >
+                        </input>
+                    </div>
+                    <div>
+                        <label for="select-surname-max">Max surname:</label>
+                        <input
+                            name="surname-max"
+                            id="select-surname-max"
+                            type="range"
+                            min="7"
+                            max="13"
+                            step="1"
+                            value="7"
+                            >
+                        </input>
+                    </div>
+                    <div>
+                        <label for="select-font-color">Font color:</label>
+                        <input
+                            name="font-color"
+                            id="select-font-color"
+                            type="color"
+                            value="#183642"
+                            >
+                        </input>
+                    </div>
+                <div>
+            </div>
+        </div>
+    </body>
+</html>
