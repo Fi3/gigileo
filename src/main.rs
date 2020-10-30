@@ -13,8 +13,8 @@ use user::User;
 extern crate rocket;
 
 //use rocket::get;
-use rocket::post;
 use rocket::routes;
+use rocket::{post, State};
 
 use rocket_contrib::serve::StaticFiles;
 
@@ -25,10 +25,15 @@ use rocket::http::{Cookie, Cookies};
 use rocket::response::status::{Accepted, Unauthorized};
 use rocket_contrib::json::Json;
 #[post("/login", format = "json", data = "<login>")]
-fn login(mut cookies: Cookies<'_>, login: Json<Login>) -> ResponseUnauthorized<Json<bool>, ()> {
+fn login(
+    mut cookies: Cookies<'_>,
+    login: Json<Login>,
+    secrets: State<login::Secrets>,
+) -> ResponseUnauthorized<Json<bool>, ()> {
     match login.validate() {
         Ok(_) => {
-            cookies.add_private(Cookie::new("token", crate::login::SECRET));
+            let secret = secrets.add();
+            cookies.add_private(Cookie::new("token", secret));
             Ok(Accepted(Some(Json(true))))
         }
         Err(_) => Err(Unauthorized::<()>(None)),
@@ -68,5 +73,6 @@ fn main() {
     rocket::ignite()
         .mount("/", routes![login, upload_photo, make_font])
         .mount("/", StaticFiles::from("static"))
+        .manage(login::Secrets::new())
         .launch();
 }

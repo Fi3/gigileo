@@ -353,6 +353,7 @@ dependencies = [
  "bytes",
  "image",
  "img-parts",
+ "rand",
  "rocket",
  "rocket_contrib",
  "serde",

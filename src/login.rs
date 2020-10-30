@@ -1,7 +1,40 @@
+use rand::Rng;
 use serde::Deserialize;
 use std::env;
+use std::sync::{Arc, Mutex};
 
-pub const SECRET: &str = "SECRET";
+fn generate_secret() -> String {
+    let mut rng = rand::thread_rng();
+    let secret = rng.gen::<i64>();
+    format!("{}", secret)
+}
+
+pub struct Secrets {
+    pub cache: Arc<Mutex<Vec<String>>>,
+}
+
+impl Secrets {
+    pub fn new() -> Self {
+        Secrets {
+            cache: Arc::new(Mutex::new(Vec::new())),
+        }
+    }
+
+    pub fn add(&self) -> String {
+        let secret = generate_secret();
+        let mut inner = self.cache.lock().unwrap();
+        if (*inner).len() > 10 {
+            *inner = (inner[1..]).to_vec();
+        };
+        (*inner).push(secret.clone());
+        secret
+    }
+
+    pub fn contains(&self, secret: &String) -> bool {
+        let inner = self.cache.lock().unwrap();
+        (*inner).contains(secret)
+    }
+}
 
 #[derive(Debug, Deserialize)]
 pub struct Login {
