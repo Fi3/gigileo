@@ -3,6 +3,7 @@ use printpdf::*;
 use std::io::BufWriter;
 use std::io::Cursor;
 use wasm_bindgen::prelude::*;
+//use web_sys;
 
 pub fn new_doc(
     width: Mm,
@@ -25,9 +26,13 @@ pub fn add_font(font: &Vec<u8>, doc: &PdfDocumentReference) -> IndirectFontRef {
 
 // image must be jpeg
 pub fn embed_image(image_file: &Vec<u8>, layer: &PdfLayerReference, ratio: f64) {
-    let image =
-        Image::try_from(image::jpeg::JpegDecoder::new(&mut Cursor::new(image_file)).unwrap())
-            .unwrap();
+    let mut image;
+    let mut image_;
+    unsafe {
+        image_ =
+            Image::try_from(image::jpeg::JpegDecoder::new(&mut Cursor::new(image_file)).unwrap());
+        image = image_.unwrap();
+    }
 
     // translate x, translate y, rotate, scale x, scale y
     // by default, an image is optimized to 300 DPI (if scale is None)
@@ -77,38 +82,64 @@ fn get_ratio(mm: f64, pixels: f64, dpi: f64) -> f64 {
     ratio
 }
 
+fn browser_px_to_mm(in_: f64, browser_side: f64, real_side: Mm) -> Mm {
+    let ratio = browser_side / in_;
+    Mm(real_side / Mm(ratio))
+}
+
 #[wasm_bindgen]
 pub struct Template {
     image: Vec<u8>,
     image_width_px: f64,
     image_height_px: f64,
+    image_width_browser: f64,
+    image_height_browser: f64,
     max_side_mm: f64,
     document_name: String,
     font: Vec<u8>,
     font_size_pt: i64,
     name: String,
     surname: String,
-    name_x_from_bottom_left_mm: f64,
-    name_y_from_bottom_left_mm: f64,
-    surname_x_from_bottom_left_mm: f64,
-    surname_y_from_bottom_left_mm: f64,
+    name_x_from_bottom_left_browser: f64,
+    name_y_from_bottom_left_browser: f64,
+    surname_x_from_bottom_left_browser: f64,
+    surname_y_from_bottom_left_browser: f64,
     result: Vec<u8>,
 }
 
 #[wasm_bindgen]
 impl Template {
     pub fn build(&mut self) {
-        let nx = Mm(self.name_x_from_bottom_left_mm);
-        let ny = Mm(self.name_y_from_bottom_left_mm);
-        let sx = Mm(self.surname_x_from_bottom_left_mm);
-        let sy = Mm(self.surname_y_from_bottom_left_mm);
+        //web_sys::console::log_1(&"a".into());
 
         let pixels = (self.image_width_px, self.image_height_px);
 
         let (width, height, ratio) = pixels_to_mm(self.max_side_mm, pixels);
         let (doc, page1, layer1) = new_doc(width, height, &self.document_name);
 
+        let nx = browser_px_to_mm(
+            self.name_x_from_bottom_left_browser,
+            self.image_width_browser,
+            width,
+        );
+        let ny = browser_px_to_mm(
+            self.name_y_from_bottom_left_browser,
+            self.image_height_browser,
+            height,
+        );
+        let sx = browser_px_to_mm(
+            self.surname_x_from_bottom_left_browser,
+            self.image_width_browser,
+            width,
+        );
+        let sy = browser_px_to_mm(
+            self.surname_y_from_bottom_left_browser,
+            self.image_height_browser,
+            height,
+        );
+
         let font = add_font(&self.font, &doc);
+
         let layer = doc.get_page(page1).get_layer(layer1);
 
         embed_image(&self.image, &layer, ratio);
@@ -130,31 +161,35 @@ impl Template {
         image: Vec<u8>,
         image_width_px: f64,
         image_height_px: f64,
+        image_width_browser: f64,
+        image_height_browser: f64,
         max_side_mm: f64,
         document_name: String,
         font: Vec<u8>,
         font_size_pt: i64,
         name: String,
         surname: String,
-        name_x_from_bottom_left_mm: f64,
-        name_y_from_bottom_left_mm: f64,
-        surname_x_from_bottom_left_mm: f64,
-        surname_y_from_bottom_left_mm: f64,
+        name_x_from_bottom_left_browser: f64,
+        name_y_from_bottom_left_browser: f64,
+        surname_x_from_bottom_left_browser: f64,
+        surname_y_from_bottom_left_browser: f64,
     ) -> Self {
         Template {
             image,
             image_width_px,
             image_height_px,
+            image_width_browser,
+            image_height_browser,
             max_side_mm,
             document_name,
             font,
             font_size_pt,
             name,
             surname,
-            name_x_from_bottom_left_mm,
-            name_y_from_bottom_left_mm,
-            surname_x_from_bottom_left_mm,
-            surname_y_from_bottom_left_mm,
+            name_x_from_bottom_left_browser,
+            name_y_from_bottom_left_browser,
+            surname_x_from_bottom_left_browser,
+            surname_y_from_bottom_left_browser,
             result: vec![],
         }
     }

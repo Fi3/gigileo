@@ -1,12 +1,12 @@
-use pdf::{add_font, add_text, embed_image, new_doc, pixels_to_mm};
+use fi3_wasm_pdf_generator::{add_font, add_text, embed_image, new_doc, pixels_to_mm};
 use printpdf::*;
 use std::fs::File;
 use std::io::BufWriter;
 
-const WIDTH: f64 = 758 as f64;
-const HEIGHT: f64 = 478 as f64;
+const WIDTH: f64 = 1754 as f64;
+const HEIGHT: f64 = 1217 as f64;
 
-// load an image of 750 x 478 px
+// load an image
 // create a pdf document
 // emebed the image in the document
 // write name and surname

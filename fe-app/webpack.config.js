@@ -9,5 +9,6 @@ module.exports = {
     path: path.resolve(__dirname, "../static/build"),
     filename: "index.js",
   },
-  mode: "production",
+  //mode: "production",
+  mode: "development",
 };

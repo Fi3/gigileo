@@ -1,5 +1,5 @@
 use std::collections::hash_map::DefaultHasher;
-use std::fs::File;
+use std::fs::{remove_file, File};
 use std::hash::{Hash, Hasher};
 use std::io::{Read, Write};
 
@@ -17,7 +17,9 @@ pub fn verify_and_remove_exif(pixels: &mut dyn Read) -> Result<Vec<u8>, ()> {
 
 pub fn save_photo(pixels: &Vec<u8>) -> String {
     std::fs::create_dir_all(format!("{}", PHOTO_PATH)).unwrap();
-    let filename = calculate_hash(pixels);
+    //let filename = calculate_hash(pixels);
+    let filename = "photo";
+    remove_file(format!("{}/{}.jpeg", PHOTO_PATH, filename));
     let mut file =
         File::create(format!("{}/{}.jpeg", PHOTO_PATH, filename)).expect("error in creating file");
     file.write_all(pixels).expect("error in writing photo");

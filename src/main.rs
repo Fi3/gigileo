@@ -3,16 +3,18 @@
 mod font;
 mod login;
 mod photo;
+mod template;
 mod user;
 
 use font::Font;
 use login::Login;
+use template::Template;
 use user::User;
 
 //#[macro_use]
 extern crate rocket;
 
-//use rocket::get;
+use rocket::get;
 use rocket::routes;
 use rocket::{post, State};
 
@@ -60,18 +62,15 @@ fn make_font(font: Json<Font>, _user: User) -> ResponseConflict<(), ()> {
     Ok(Accepted::<()>(None))
 }
 
-//#[get("/pkg/pdf_bg.wasm")]
-//fn get_pdf_generator() -> rocket::Response<'static> {
-//    let pdf_generator = std::fs::read("./static/pkg/pdf_bg.wasm").unwrap();
-//    rocket::Response::build()
-//        .raw_header("Content-Type", "application/x-cazzi")
-//        .sized_body(std::io::Cursor::new(pdf_generator))
-//        .finalize()
-//}
+#[post("/save-template", format = "json", data = "<template>")]
+fn save_template(template: Json<Template>, _user: User) -> ResponseConflict<(), ()> {
+    template.save();
+    Ok(Accepted::<()>(None))
+}
 
 fn main() {
     rocket::ignite()
-        .mount("/", routes![login, upload_photo, make_font])
+        .mount("/", routes![login, upload_photo, make_font, save_template])
         .mount("/", StaticFiles::from("static"))
         .manage(login::Secrets::new())
         .launch();

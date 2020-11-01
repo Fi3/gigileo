@@ -7,7 +7,6 @@ import {Label} from '/app/label.js'
 import {Workspace} from '/app/workspace.js'
 import {Uploader} from '/app/upload-photo.js'
 import {Login} from '/app/login.js'
-import * as pdf from '/pdf-generator/fi3_wasm_pdf_generator.js'
 
 if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
   const tests = test1.concat(test2).concat(test3)

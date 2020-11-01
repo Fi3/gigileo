@@ -1,6 +1,7 @@
-import {get, set_style, write} from '/app/utils.js'
+import {get, set_style, write, url_to_bytes} from '/app/utils.js'
 import {getGlobal, setGlobal} from '/app/global-state.js'
 import {Modality} from '/app/modalities.js'
+import {Workspace} from '/app/workspace.js'
 
 const max = Math.max
 const min = Math.min
@@ -76,7 +77,7 @@ name.addEventListener('keydown', (e) => {
 
   // arrows and backspace
   const permitted_keys = [37, 38, 39, 40, 8]
-  const is_full = name.innerHTML.length === getGlobal().max_name
+  const is_full = name.innerHTML.length === getGlobal().max_name + 4
   const is_permitted = permitted_keys.indexOf((parseInt(e.keyCode))) > -1
 
   if (is_full && ! is_permitted) {
@@ -93,7 +94,7 @@ surname.addEventListener('keydown', (e) => {
 
   // arrows and backspace
   const permitted_keys = [37, 38, 39, 40, 8]
-  const is_full = surname.innerHTML.length === getGlobal().max_surname
+  const is_full = surname.innerHTML.length === getGlobal().max_surname + 7
   const is_permitted = permitted_keys.indexOf((parseInt(e.keyCode))) > -1
 
   if (is_full && ! is_permitted) {
@@ -125,7 +126,7 @@ const Label = {
 
   get_font_size_pt: () => {
     // TODO check it
-    get_font_size_browser_px() * (72 / 96)
+    return Label.get_font_size_browser_px() * (72 / 96)
   },
 
   get_font_family: () => getGlobal().font_family,
@@ -134,21 +135,36 @@ const Label = {
 
   get_surname: () => get('surname').innerHTML,
 
-  name_x: () => get('name').getClientRect()[0].x,
+  name_x: () => get('name').getBoundingClientRect().x,
 
-  name_y: () => get('surname').getClientRect()[0].y,
+  name_y: () => get('name').getBoundingClientRect().y,
 
-  surname_x: () => get('surname').getClientRect()[0].x,
+  surname_x: () => get('surname').getBoundingClientRect().x,
 
-  surname_y: () => get('surname').getClientRect()[0].y,
+  surname_y: () => get('surname').getBoundingClientRect().y,
 
-  transform_x: (x, Workspace) => {
-    return Workspace.get_x() - x
+  transform_x: (x) => {
+    let image_x = get('image').getBoundingClientRect().x
+    return x - image_x
   },
 
-  transform_y: (y, Workspace) => {
-    return Workspace.get_height() - (Workspace.get_y() - y)
+  transform_y: (y) => {
+    let image_y = get('image').getBoundingClientRect().y
+    let image_h = get('image').height
+    let label_h = get('label').getBoundingClientRect().height
+    return ((image_h - (y - image_y)) - (label_h / 1.5))
   },
+
+  transformed_name_x: () => Label.transform_x(Label.name_x()),
+  transformed_name_y: () => Label.transform_y(Label.name_y()),
+
+  transformed_surname_x: () => Label.transform_x(Label.surname_x()),
+  transformed_surname_y: () => Label.transform_y(Label.surname_y()),
+
+  get_font_bytes: async () => {
+    return await url_to_bytes('/fonts/examplefont.ttf')
+  },
+
 
 }
 

@@ -12,6 +12,7 @@ export const global = {
   modality: Modality('Drag'),
   font_open: false,
   logged: false,
+  is_test_image: false,
 }
 
 const setGlobal = (field, value) => {

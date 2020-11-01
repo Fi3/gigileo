@@ -157,6 +157,28 @@ const write = (element, value) => {element.innerHTML = value}
 const append = (element, val) => {element.innerHTML = element.innerHTML + val}
 const is_focused = (element) => document.activeElement === element
 
+const readable_to_bytes = async (readable) => {
+  let bytes = []
+  let cond = true
+  while (cond) {
+    let _ = await readable.read().then(({done, value}) => {
+      if (done) {
+        cond = false
+      }
+      if (value) {
+        bytes = Uint8Array.from([...bytes, ...value])
+      }
+    })
+  }
+  return bytes
+}
+
+const url_to_bytes = async (url) => {
+  const body = (await fetch(url)).body
+  const readable = body.getReader()
+  return await readable_to_bytes(readable)
+}
+
 export {
   is_some
   , is_none
@@ -173,4 +195,6 @@ export {
   , write
   , is_focused
   , append
+  , url_to_bytes
+  , readable_to_bytes
 }

@@ -1,4 +1,5 @@
 import {get, set_attr, set_style} from '/app/utils.js'
+import {setGlobal} from '/app/global-state.js'
 const upload = get('upload')
 const image = get('image')
 const message = get('message')
@@ -76,6 +77,7 @@ const load_test = () => {
   set_style(load_image, 'display', 'none')
   set_style(use_test_image, 'display', 'none')
   set_style(loading, 'display', 'block')
+  setGlobal('is_test_image', true)
   set_image('test-image')
 }
 

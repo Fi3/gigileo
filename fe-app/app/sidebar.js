@@ -2,6 +2,25 @@ import {get, set_style, set_attr} from '/app/utils.js'
 import {getGlobal, setGlobal} from '/app/global-state.js'
 import {Modality} from '/app/modalities.js'
 import {toogle_font} from '/app/font.js'
+import {Workspace} from '/app/workspace.js'
+import * as pdf from '/pdf-generator/fi3_wasm_pdf_generator.js'
+
+const save_template = async (template) => {
+  let response = await fetch('/save-template', {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    redirect: 'follow',
+    referrefPolicy: 'no-referree',
+    body: JSON.stringify(template),
+  })
+  const text = await response.text()
+  return [response.status, text]
+}
 
 const dragdrop = get('dragdrop')
 const select = get('select')
@@ -64,6 +83,34 @@ const on_font_open = () => {
   toogle_font()
 }
 font.addEventListener('click', on_font_open)
+
+const on_try_ = async () => {
+  const template = await Workspace.transform_template(await Workspace.fetch_template())
+  //window.template = template
+  let pdf_ = pdf.Template.new(...template)
+  pdf_.build()
+  pdf_ = pdf_.get()
+  const data = new Blob([pdf_], { type: 'application/pdf' })
+  const file = document.createElement('a')
+  file.download = 'ticket.pdf'
+  file.href = URL.createObjectURL(data)
+  file.click()
+}
+try_.addEventListener('click', on_try_)
+
+const on_save = async () => {
+  const template = await Workspace.get_template()
+  delete template.image
+  template.font = 'TODO'
+  const [status, res] = await save_template(template)
+  if (199 < status < 300) {
+    alert("template uploaded")
+  } else {
+    alert("some error occurred")
+  }
+}
+save.addEventListener('click', on_save)
+
 
 const side_bar_dafult = {}
 
