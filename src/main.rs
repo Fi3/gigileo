@@ -70,8 +70,11 @@ fn save_template(template: Json<Template>, _user: User) -> ResponseConflict<(), 
 
 fn main() {
     rocket::ignite()
-        .mount("/", routes![login, upload_photo, make_font, save_template])
-        .mount("/", StaticFiles::from("static"))
+        .mount(
+            "/gigileo",
+            routes![login, upload_photo, make_font, save_template],
+        )
+        .mount("/gigileo", StaticFiles::from("static"))
         .manage(login::Secrets::new())
         .launch();
 }
