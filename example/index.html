@@ -1,0 +1,18 @@
+<html>
+  <head>
+    <script src="/gigileo/build/module.js"></script>
+  <head>
+  <body>
+    <input id=name type=text placeholder=name />
+    <input id=surname type=text placeholder=surname />
+    <button id=button_ >SEND</button>
+    <script>
+      const on_click = () => {
+        const name = document.getElementById('name').value
+        const surname = document.getElementById('surname').value
+        window.ticket_download(name, surname)
+      }
+      document.getElementById('button_').addEventListener('click', on_click)
+    </script>
+  </body>
+</html>
