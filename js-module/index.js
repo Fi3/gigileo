@@ -1,10 +1,31 @@
 import * as pdf from '/pdf-generator/fi3_wasm_pdf_generator.js'
 
+const readable_to_bytes = async (readable) => {
+  let bytes = []
+  let cond = true
+  while (cond) {
+    let _ = await readable.read().then(({done, value}) => {
+      if (done) {
+        cond = false
+      }
+      if (value) {
+        bytes = Uint8Array.from([...bytes, ...value])
+      }
+    })
+  }
+  return bytes
+}
 
-const  fetch_template = async (name, surname) => {
-    const template = await (await fetch('/template.json')).json()
-    const image = await url_to_bytes( '/photo-archive/photo.jpeg')
-    const font = await url_to_bytes('/fonts/examplefont.ttf')
+const url_to_bytes = async (url) => {
+  const body = (await fetch(url)).body
+  const readable = body.getReader()
+  return await readable_to_bytes(readable)
+}
+
+const fetch_template = async (name, surname) => {
+    const template = await (await fetch('/gigileo/template.json')).json()
+    const image = await url_to_bytes( '/gigileo/photo-archive/photo.jpeg')
+    const font = await url_to_bytes('/gigileo/fonts/examplefont.ttf')
     return {...template, font, image, name, surname}
 }
 
@@ -29,7 +50,7 @@ const transform_template = (t) => {
 }
 
 const ticket_download = async (name, surname) => {
-  const template = transform_template(await fetch_template())
+  const template = transform_template(await fetch_template(name, surname))
   let pdf_ = pdf.Template.new(...template)
   pdf_.build()
   pdf_ = pdf_.get()
