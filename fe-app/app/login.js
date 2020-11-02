@@ -6,7 +6,7 @@ const login_button = get('password-button')
 const login_background = get('login-background')
 
 const login = async (password) => {
-  let response = await fetch('/login', {
+  let response = await fetch('login', {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',

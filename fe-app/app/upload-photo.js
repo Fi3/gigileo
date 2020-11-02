@@ -9,7 +9,7 @@ const label = get('label')
 const loading = get('loading')
 
 const upload_photo = async (photo) => {
-  let response = await fetch('/upload-photo', {
+  let response = await fetch('upload-photo', {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
@@ -52,7 +52,7 @@ const to_jpg = async (file, quality) => {
 }
 
 const set_image = (file_name) => {
-  set_attr(image, 'src', `/photo-archive/${file_name}.jpeg`)
+  set_attr(image, 'src', `photo-archive/${file_name}.jpeg`)
   set_style(loading, 'display', 'none')
   set_style(image, 'display', 'block')
   set_style(label, 'display', 'flex')

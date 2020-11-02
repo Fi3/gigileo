@@ -11,15 +11,15 @@
 
 @font-face {
   font-family: "dancing-script";
-  src: url("/fonts/dancing-script/dancing-script.ttf");
+  src: url("fonts/dancing-script/dancing-script.ttf");
 }
 @font-face {
   font-family: "playfair-italic";
-  src: url("/fonts/playfair/playfair-italic.ttf");
+  src: url("fonts/playfair/playfair-italic.ttf");
 }
 @font-face {
   font-family: "playfair";
-  src: url("/fonts/playfair/playfair.ttf");
+  src: url("fonts/playfair/playfair.ttf");
 }
 
 body {

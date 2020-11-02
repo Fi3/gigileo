@@ -6,7 +6,7 @@ import {Workspace} from '/app/workspace.js'
 import * as pdf from '/pdf-generator/fi3_wasm_pdf_generator.js'
 
 const save_template = async (template) => {
-  let response = await fetch('/save-template', {
+  let response = await fetch('save-template', {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',

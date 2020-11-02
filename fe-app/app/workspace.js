@@ -84,11 +84,11 @@ const Workspace = {
 
   fetch_template: async () => {
     const img_url = getGlobal().is_test_image
-      ? '/photo-archive/test-image.jpeg'
-      : '/photo-archive/photo.jpeg'
-    const template = await (await fetch('/template.json')).json()
+      ? 'photo-archive/test-image.jpeg'
+      : 'photo-archive/photo.jpeg'
+    const template = await (await fetch('template.json')).json()
     const image = await url_to_bytes(img_url)
-    const font = await url_to_bytes('/fonts/examplefont.ttf')
+    const font = await url_to_bytes('fonts/examplefont.ttf')
     return {...template, font, image, name: 'Name', surname: 'Surname'}
   },
 
