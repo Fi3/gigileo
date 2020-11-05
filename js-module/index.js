@@ -49,14 +49,14 @@ const transform_template = (t) => {
     ]
 }
 
-const ticket_download = async (name, surname) => {
+const ticket_download = async (name, surname, document_name) => {
   const template = transform_template(await fetch_template(name, surname))
   let pdf_ = pdf.Template.new(...template)
   pdf_.build()
   pdf_ = pdf_.get()
   const data = new Blob([pdf_], { type: 'application/pdf' })
   const file = document.createElement('a')
-  file.download = 'ticket.pdf'
+  file.download = `${document_name}.pdf`
   file.href = URL.createObjectURL(data)
   file.click()
 }

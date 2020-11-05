@@ -14,7 +14,7 @@ use user::User;
 //#[macro_use]
 extern crate rocket;
 
-use rocket::get;
+//use rocket::get;
 use rocket::routes;
 use rocket::{post, State};
 
